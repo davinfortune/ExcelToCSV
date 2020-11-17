@@ -5,15 +5,33 @@ root = Tk()
 root.geometry("400x500")
 root.title('Kent CSV Converter')
 
+imported = False
 def importExcel():
-    myLabel2 = Label(root, text = "It Worked")
-    myLabel2.grid(row=1, column=2)
+    global imported
+    imported = True
+    importNotification = Label(root, text = "Your File has Been Imported!")
+    importNotification.grid(row=1, column=2)
+    importNotification.place(relx=0.5, rely=0.4, anchor=CENTER)
+    exportNotification = Label(root, text = "                                                                                       ")
+    exportNotification.grid(row=1, column=2)
+    exportNotification.place(relx=0.5, rely=0.6, anchor=CENTER)
 
 def exportCSV():
-    print("hello")
+    if imported == True:
+        exportNotification = Label(root, text = "Your File has Been Exported To Your Desktop!")
+        exportNotification.grid(row=1, column=2)
+        exportNotification.place(relx=0.5, rely=0.6, anchor=CENTER)
+    else:        
+        exportNotification = Label(root, text = "You Have Not Imported A File Yet!")
+        exportNotification.grid(row=1, column=2)
+        exportNotification.place(relx=0.5, rely=0.6, anchor=CENTER)
+
 
 def exitButton():
     root.destroy()
+
+
+
 
 appHeading = Label(root, text = "Kent Excel to CSV Converter", font=('Helvetica 18 bold',15))
 importButton = Button(root, text = "Import File", font=('Helvetica 18 bold',25), command=importExcel,bg="green",fg="white",padx=20,pady=5)
