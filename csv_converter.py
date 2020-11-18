@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import *
+import pandas as pd
+
 
 
 root = tk.Tk()
@@ -12,7 +14,10 @@ root.title('Kent CSV Converter')
 imported = False
 def importExcel():
     file_path = filedialog.askopenfilename()
-    print(file_path)
+    data = pd.read_excel (file_path, sheet_name="Quote" , index_col=23,header=23)
+    name = data.iloc[0,2]
+    print(name)
+
     global imported
     imported = True
     importNotification = Label(root, text = "Your File has Been Imported!")
