@@ -20,42 +20,19 @@ def importExcel():
     data = pd.read_excel (file_path, sheet_name="Quote" , index_col=23,header=23)
 # SECOND TABLE COLUMNS
     endOfSecondTable = data.iloc[0,8]
-    sapCodeColumn =[]
-    qtyColumn = []
-    descriptionColumn = []
-    unitPriceColumn = []
-    discountColumn = []
-    totalPriceColumn =[]
-    materialGradeColumn = []
-    finishColumn = []
-    estEngHoursColumn =[]
-    estProductionHoursColumn = []
-    productGroup1Column = []
-    productGroup2Column = []
-    productGroup3Column = []
-    willNeedSubConColumn = []
-    promiseDateColumn = []
-    pdmProjectColumn = []
-    estimatedCostPrice = []
-    finalSapCodeColumn = []
+
+    grid_test = [["SAP Code","Qty","Description","Unit Price","Discount","Total Price","Material Grade","Finish","Est Eng Hours","Est Production Hours","Product Group 1",
+                "Product Group 2", "Product Group 3", "Will need Sub Con", "Promise Date", "PDM Project", "Estimated Cost Price", "sap code"]]
 
     for x in range(1000):
         if endOfSecondTable != "Total:":
             endOfSecondTable = data.iloc[x+1,8]
 
-            sapCodeColumn.append(data.iloc[x,0])
-            qtyColumn.append(data.iloc[x,1])
-            descriptionColumn.append(data.iloc[x,2])
-            unitPriceColumn.append(data.iloc[x,7])
-            discountColumn.append(data.iloc[x,8])
-            totalPriceColumn.append(data.iloc[x,9])
-            materialGradeColumn.append(data.iloc[x,11])
-            finishColumn.append(data.iloc[x,12])
-            estEngHoursColumn.append(data.iloc[x,13])
-            estProductionHoursColumn.append(data.iloc[x,14])
+            grid_test.append( [ data.iloc[x,0],data.iloc[x,1],data.iloc[x,2],data.iloc[x,7],data.iloc[x,8],data.iloc[x,9],data.iloc[x,11],data.iloc[x,12],data.iloc[x,13],
+                             data.iloc[x,14],data.iloc[x,15],data.iloc[x,16],data.iloc[x,17],data.iloc[x,18],data.iloc[x,20],data.iloc[x,22],data.iloc[x,23] ] )
         else:
             break
-    print(estProductionHoursColumn[0])
+    print(grid_test)
 
 
     global imported
