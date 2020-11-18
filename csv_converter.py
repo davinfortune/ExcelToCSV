@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import *
+from numpy.core.records import array
 import pandas as pd
 
 
@@ -12,11 +13,50 @@ root.geometry("400x500")
 root.title('Kent CSV Converter')
 
 imported = False
+
+
 def importExcel():
     file_path = filedialog.askopenfilename()
     data = pd.read_excel (file_path, sheet_name="Quote" , index_col=23,header=23)
-    name = data.iloc[0,2]
-    print(name)
+# SECOND TABLE COLUMNS
+    endOfSecondTable = data.iloc[0,8]
+    sapCodeColumn =[]
+    qtyColumn = []
+    descriptionColumn = []
+    unitPriceColumn = []
+    discountColumn = []
+    totalPriceColumn =[]
+    materialGradeColumn = []
+    finishColumn = []
+    estEngHoursColumn =[]
+    estProductionHoursColumn = []
+    productGroup1Column = []
+    productGroup2Column = []
+    productGroup3Column = []
+    willNeedSubConColumn = []
+    promiseDateColumn = []
+    pdmProjectColumn = []
+    estimatedCostPrice = []
+    finalSapCodeColumn = []
+
+    for x in range(1000):
+        if endOfSecondTable != "Total:":
+            endOfSecondTable = data.iloc[x+1,8]
+
+            sapCodeColumn.append(data.iloc[x,0])
+            qtyColumn.append(data.iloc[x,1])
+            descriptionColumn.append(data.iloc[x,2])
+            unitPriceColumn.append(data.iloc[x,7])
+            discountColumn.append(data.iloc[x,8])
+            totalPriceColumn.append(data.iloc[x,9])
+            materialGradeColumn.append(data.iloc[x,11])
+            finishColumn.append(data.iloc[x,12])
+            estEngHoursColumn.append(data.iloc[x,13])
+            estProductionHoursColumn.append(data.iloc[x,14])
+        else:
+            break
+    print(estProductionHoursColumn[0])
+
 
     global imported
     imported = True
