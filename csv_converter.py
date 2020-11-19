@@ -3,7 +3,7 @@ from tkinter import filedialog
 from tkinter import *
 from tkinter.ttk import Progressbar
 import time
-from numpy.core.numeric import full
+from numpy.core.numeric import NaN, full
 from numpy.core.records import array
 import pandas as pd
 import os
@@ -20,10 +20,14 @@ imported = False
 
 try:
     os.remove("quotation.csv")
+except:
+    print("No Client Files to Delete")
+
+try:
     os.remove("first_quotation.csv")
     os.remove("second_quotation.csv")
 except:
-    print("No Files to Delete")
+    print("No Enterpise Files To Delete")
 
 
 
@@ -36,22 +40,23 @@ second_table = [["SAP Code","Qty","Description","Unit Price","Discount","Total P
 
 def importExcel():
     file_path = filedialog.askopenfilename()
-    first_table_data = pd.read_excel (file_path, sheet_name="Quote" , index_col=None,header=None)
-    second_table_data = pd.read_excel (file_path, sheet_name="Quote" , index_col=23,header=23)
     progress = Progressbar(root, orient = HORIZONTAL, 
-              length = 100, mode = 'determinate') 
+        length = 100, mode = 'determinate') 
     progress.place(relx=0.5, rely=0.4, anchor=CENTER)
     progress['value'] = 20
     root.update_idletasks() 
-    time.sleep(1) 
+
+    first_table_data = pd.read_excel (file_path, sheet_name="Quote" , index_col=None,header=None)
+    second_table_data = pd.read_excel (file_path, sheet_name="Quote" , index_col=23,header=23)
+    progress['value'] = 40
+    root.update_idletasks() 
+
 # FIRST TABLE COLUMNS
     first_table.append([ first_table_data.iloc[3,4], first_table_data.iloc[8,2],first_table_data.iloc[9,2],first_table_data.iloc[10,2],first_table_data.iloc[12,2],
                          first_table_data.iloc[13,2],first_table_data.iloc[14,2],first_table_data.iloc[15,2],first_table_data.iloc[16,2],first_table_data.iloc[12,7],first_table_data.iloc[13,7],
                          first_table_data.iloc[20,1],first_table_data.iloc[20,3],first_table_data.iloc[20,5],first_table_data.iloc[20,8],first_table_data.iloc[3,14],first_table_data.iloc[4,14],
                          first_table_data.iloc[5,14],first_table_data.iloc[6,14],first_table_data.iloc[7,14],first_table_data.iloc[8,14],first_table_data.iloc[5,20],
                          first_table_data.iloc[9,20],first_table_data.iloc[12,20] ])
-    progress['value'] = 40
-    root.update_idletasks() 
 # SECOND TABLE COLUMNS
     endOfSecondTable = second_table_data.iloc[0,8]
 
@@ -67,7 +72,7 @@ def importExcel():
             break
     progress['value'] = 80
     root.update_idletasks() 
-    time.sleep(1) 
+
 # PLACING NOTIFCATIONS
     global imported
     imported = True
@@ -85,7 +90,7 @@ def exportCSV():
         exportNotification = Label(root, text = "Please Choose A Platform to Export to!")
         exportNotification.grid(row=1, column=2)
         exportNotification.place(relx=0.5, rely=0.6, anchor=CENTER)
-        clientButton = Button(root, text = "For Client Export", font=('Helvetica 18 bold',10), command=clientExport, bg="blue",fg="white",padx=5,pady=5)
+        clientButton = Button(root, text = "For Client", font=('Helvetica 18 bold',10), command=clientExport, bg="blue",fg="white",padx=5,pady=5)
         clientButton.grid(row=1, column=2)
         clientButton.place(relx=0.3, rely=0.7, anchor=CENTER)
         enterpriseButton = Button(root, text = "For Enterprise", font=('Helvetica 18 bold',10), command=enterpriseExport, bg="blue",fg="white",padx=5,pady=5)
@@ -97,13 +102,20 @@ def exportCSV():
         exportNotification.place(relx=0.5, rely=0.6, anchor=CENTER)
 
 def clientExport():
-        first_table_dataframe = pd.DataFrame(first_table)
-        first_table_dataframe.to_csv('first_quotation.csv')
-        second_table_dataframe = pd.DataFrame(second_table)
-        second_table_dataframe.to_csv('second_quotation.csv')
+    first_table_dataframe = pd.DataFrame(first_table)
+    first_table_dataframe.to_csv('first_quotation.csv')
+    second_table_dataframe = pd.DataFrame(second_table)
+    second_table_dataframe.to_csv('second_quotation.csv')
 
 def enterpriseExport():
-    full_table = first_table[0][0]+second_table[0][0]
+    full_table = []
+    full_table.append(first_table[0]+second_table[0])
+    full_table.append(first_table[1]+second_table[1])
+    for x in range(2,200):
+        try:
+            full_table.append(first_table[x]+second_table[x])
+        except:
+            print("Ran out of rows error")
     full_table_dataframe = pd.DataFrame(full_table)
     full_table_dataframe.to_csv('quotation.csv')
 
